@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using FreeLibServer.Models;
+using FreeLibServer.Core.Models;
 
-namespace FreeLibServer.Persistence
+namespace FreeLibServer.Core
 {
     public interface IBookRepository
     {

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FreeLibServer.Models
+namespace FreeLibServer.Core.Models
 {
     [Table("Books")]
     public class Book

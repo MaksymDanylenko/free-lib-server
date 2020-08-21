@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FreeLibServer.Models
+namespace FreeLibServer.Core.Models
 {
     [Table("BookGenres")]
     public class BookGenre

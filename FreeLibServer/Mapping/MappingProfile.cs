@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FreeLibServer.Controllers.Resources;
-using FreeLibServer.Models;
+using FreeLibServer.Core.Models;
 using System.Linq;
 
 namespace FreeLibServer.Mapping

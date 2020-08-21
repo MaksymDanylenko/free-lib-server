@@ -1,4 +1,4 @@
-﻿using FreeLibServer.Models;
+﻿using FreeLibServer.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FreeLibServer.Persistence

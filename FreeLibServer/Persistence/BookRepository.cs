@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
-using FreeLibServer.Models;
+using FreeLibServer.Core;
+using FreeLibServer.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FreeLibServer.Persistence

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FreeLibServer.Models
+namespace FreeLibServer.Core.Models
 {
     [Table("BookAuthors")]
     public class BookAuthor

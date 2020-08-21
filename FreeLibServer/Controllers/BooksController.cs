@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FreeLibServer.Controllers.Resources;
-using FreeLibServer.Models;
-using FreeLibServer.Persistence;
+using FreeLibServer.Core.Models;
+using FreeLibServer.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -52,6 +52,7 @@ namespace FreeLibServer.Controllers
 
             await _unitOfWork.CompleteAsync();
 
+            book = await _repository.GetBook(book.Id);
             var result = _mapper.Map<Book, BookResource>(book);
             return Ok(result);
         }

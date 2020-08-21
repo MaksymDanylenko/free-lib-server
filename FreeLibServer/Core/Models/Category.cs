@@ -1,4 +1,4 @@
-﻿namespace FreeLibServer.Models
+﻿namespace FreeLibServer.Core.Models
 {
     public class Category
     {

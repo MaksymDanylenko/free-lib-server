@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace FreeLibServer.Persistence
+namespace FreeLibServer.Core
 {
     public interface IUnitOfWork {
          Task CompleteAsync();

@@ -3,24 +3,22 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FreeLibServer.Models
+namespace FreeLibServer.Core.Models
 {
-    [Table("Authors")]
-    public class Author
+    [Table("Genres")]
+    public class Genre
     {
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(50)]
         public string Name { get; set; }
 
-        public string Info { get; set; }
+        public ICollection<BookGenre> Books { get; set; }
 
-        public ICollection<BookAuthor> Books { get; set; }
-
-        public Author()
+        public Genre()
         {
-            Books = new Collection<BookAuthor>();
+            Books = new Collection<BookGenre>();
         }
     }
 }

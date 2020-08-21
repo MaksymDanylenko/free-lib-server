@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using FreeLibServer.Models;
 
 namespace FreeLibServer.Controllers.Resources
 {
