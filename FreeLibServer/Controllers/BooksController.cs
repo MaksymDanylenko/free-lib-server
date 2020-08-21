@@ -10,46 +10,47 @@ namespace FreeLibServer.Controllers
 {
     [Route("/api/books")]
     public class BooksController : Controller {
-        private readonly FreeLibDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IBookRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public BooksController(FreeLibDbContext context, IMapper mapper) {
-            _context = context;
+        public BooksController(IMapper mapper, IBookRepository repository, IUnitOfWork unitOfWork) {
             _mapper = mapper;
+            _repository = repository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost()]
-        public async Task<IActionResult> CreateBook([FromBody] BookResource bookResource) {
+        public async Task<IActionResult> CreateBook([FromBody] SaveBookResource bookResource) {
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
-            var book = _mapper.Map<BookResource, Book>(bookResource);
+            var book = _mapper.Map<SaveBookResource, Book>(bookResource);
 
-            _context.Books.Add(book);
-            await _context.SaveChangesAsync();
+            _repository.Add(book);
+            await _unitOfWork.CompleteAsync();
+
+            book = await _repository.GetBook(book.Id);
 
             var result = _mapper.Map<Book, BookResource>(book);
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBook(int id, [FromBody] BookResource bookResource) {
+        public async Task<IActionResult> UpdateBook(int id, [FromBody] SaveBookResource bookResource) {
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
-            var book = await _context.Books
-                .Include(b => b.Authors)
-                .Include(b => b.Genres)
-                .SingleOrDefaultAsync(b => b.Id == id);
+            var book = await _repository.GetBook(id);
 
             if (book == null)
                 return NotFound();
 
-            _mapper.Map<BookResource, Book>(bookResource, book);
+            _mapper.Map<SaveBookResource, Book>(bookResource, book);
 
-            await _context.SaveChangesAsync();
+            await _unitOfWork.CompleteAsync();
 
             var result = _mapper.Map<Book, BookResource>(book);
             return Ok(result);
@@ -57,22 +58,19 @@ namespace FreeLibServer.Controllers
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id) {
-            var book = await _context.Books.FindAsync(id);
+            var book = await _repository.GetBook(id, includeRelated: false);
 
             if (book == null)
                 return NotFound();
 
-            _context.Remove(book);
-            await _context.SaveChangesAsync();
+            _repository.Remove(book);
+            await _unitOfWork.CompleteAsync();
             return Ok(id);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBook(int id) {
-            var book = await _context.Books
-                .Include(b => b.Authors)
-                .Include(b => b.Genres)
-                .SingleOrDefaultAsync(b => b.Id == id);
+            var book = await _repository.GetBook(id);
 
             if (book == null)
                 return NotFound();

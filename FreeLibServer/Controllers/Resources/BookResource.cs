@@ -1,22 +1,19 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using FreeLibServer.Models;
 
 namespace FreeLibServer.Controllers.Resources
 {
-    public class BookResource
+    public class BookResource : KeyValuePairResource
     {
-        public int Id { get; set; }
+
+        public ICollection<KeyValuePairResource> Authors { get; set; }
+
+        public ICollection<KeyValuePairResource> Genres { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string Name { get; set; }
-
-        public ICollection<int> Authors { get; set; }
-
-        public ICollection<int> Genres { get; set; }
-
-        public int CategoryId { get; set; }
+        public string Category { get; set; }
 
         public string Info { get; set; }
 
@@ -28,8 +25,8 @@ namespace FreeLibServer.Controllers.Resources
 
         public BookResource()
         {
-            Authors = new Collection<int>();
-            Genres = new Collection<int>();
+            Authors = new Collection<KeyValuePairResource>();
+            Genres = new Collection<KeyValuePairResource>();
         }
     }
 }
