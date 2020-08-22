@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FreeLibServer.Core;
 using FreeLibServer.Core.Models;
@@ -12,6 +13,14 @@ namespace FreeLibServer.Persistence
         {
             _context = context;
         }
+        public async Task<IEnumerable<Book>> GetBooks() {
+            return await _context.Books
+                .Include(b => b.Authors)
+                .ThenInclude(ba => ba.Author)
+                .Include(b => b.Genres)
+                .ThenInclude(bg => bg.Genre)
+                .ToListAsync();
+        }
         public async Task<Book> GetBook(int id, bool includeRelated = true) {
             if (!includeRelated)
                 return await _context.Books.FindAsync(id);
@@ -24,8 +33,8 @@ namespace FreeLibServer.Persistence
                 .SingleOrDefaultAsync(b => b.Id == id);
         }
 
-        public void Add(Book book) {
-            _context.Books.Add(book);
+        public async Task Add(Book book) {
+            await _context.Books.AddAsync(book);
         }
 
         public void Remove(Book book) {

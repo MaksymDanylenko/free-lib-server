@@ -5,6 +5,7 @@ using FreeLibServer.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace FreeLibServer.Controllers
 {
@@ -28,7 +29,7 @@ namespace FreeLibServer.Controllers
 
             var book = _mapper.Map<SaveBookResource, Book>(bookResource);
 
-            _repository.Add(book);
+            await _repository.Add(book);
             await _unitOfWork.CompleteAsync();
 
             book = await _repository.GetBook(book.Id);
@@ -77,6 +78,13 @@ namespace FreeLibServer.Controllers
                 return NotFound();
 
             return Ok(_mapper.Map<Book, BookResource>(book));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBooks() {
+            var books = await _repository.GetBooks();
+            var result = books.Select(b => _mapper.Map<Book, BookResource>(b));
+            return Ok(result);
         }
 
     }

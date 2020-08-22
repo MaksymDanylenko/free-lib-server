@@ -30,12 +30,17 @@ namespace FreeLibServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllers();
-            services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
-            services.AddDbContext<FreeLibDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
+            services.AddDbContext<FreeLibDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+            services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
+
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IGenreRepository, GenreRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

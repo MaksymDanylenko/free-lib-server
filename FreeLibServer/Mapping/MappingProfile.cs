@@ -9,22 +9,26 @@ namespace FreeLibServer.Mapping
     {
         public MappingProfile()
         {
-            //Domain to API resources
+            //доменная модель -> API ресурсы
             CreateMap<Book, SaveBookResource>()
                 .ForMember(br => br.Authors, opt => opt.MapFrom(b => b.Authors.Select(ba => ba.AuthorId)))
                 .ForMember(br => br.Genres, opt => opt.MapFrom(b => b.Genres.Select(bg => bg.GenreId)));
 
+            CreateMap<Book, BookResource>()
+                .ForMember(br => br.Authors, opt => opt.MapFrom(b => b.Authors.Select(ba => new KeyValuePairResource { Id = ba.Author.Id, Name = ba.Author.Name } )))
+                .ForMember(br => br.Genres, opt => opt.MapFrom(b => b.Genres.Select(bg => new KeyValuePairResource { Id = bg.Genre.Id, Name = bg.Genre.Name })));
+
+            CreateMap<Author, KeyValuePairResource>();
+
+            CreateMap<Author, SaveAuthorResource>();
+
             CreateMap<Author, AuthorResource>()
                 .ForMember(ar => ar.Books, opt => opt.MapFrom(a => a.Books.Select(ba => ba.BookId)));
 
-            CreateMap<Genre, GenreResource>()
-                .ForMember(gr => gr.Books, opt => opt.MapFrom(g => g.Books.Select(bg => bg.GenreId)));
+            CreateMap<Genre, KeyValuePairResource>();
 
-            CreateMap<Book, BookResource>()
-                .ForMember(br => br.Authors, opt => opt.MapFrom(b => b.Authors.Select(ba => new AuthorResource { Id = ba.Author.Id, Name = ba.Author.Name } )))
-                .ForMember(br => br.Genres, opt => opt.MapFrom(b => b.Genres.Select(bg => new GenreResource { Id = bg.Genre.Id, Name = bg.Genre.Name })));
+            //API ресурсы -> доменная модель
 
-            //API resources to domain
             CreateMap<SaveBookResource, Book>()
                 .ForMember(b => b.Id, opt => opt.Ignore())
                 .ForMember(b => b.Authors, opt => opt.Ignore())
@@ -57,7 +61,7 @@ namespace FreeLibServer.Mapping
             CreateMap<AuthorResource, Author>()
                 .ForMember(a => a.Id, opt => opt.Ignore())
                 .ForMember(a => a.Books, opt => opt.Ignore())
-                .AfterMap((ar, a) => {
+                /*.AfterMap((ar, a) => {
 
                     var removedBooks = a.Books.Where(b => !ar.Books.Contains(b.BookId)).ToList();
                     foreach (var b in removedBooks)
@@ -67,22 +71,14 @@ namespace FreeLibServer.Mapping
                     foreach (var b in addedBooks)
                         a.Books.Add(b);
 
-                });
+                })*/;
 
-            CreateMap<GenreResource, Genre>()
+            CreateMap<SaveAuthorResource, Author>()
+                .ForMember(g => g.Id, opt => opt.Ignore());
+
+            CreateMap<KeyValuePairResource, Genre>()
                 .ForMember(g => g.Id, opt => opt.Ignore())
-                .ForMember(g => g.Books, opt => opt.Ignore())
-                .AfterMap((gr, g) => {
-
-                    var removedBooks = g.Books.Where(b => !gr.Books.Contains(b.BookId)).ToList();
-                    foreach (var b in removedBooks)
-                        g.Books.Remove(b);
-
-                    var addedBooks = gr.Books.Where(id => !g.Books.Any(b => b.BookId == id)).Select(id => new BookGenre { BookId = id});
-                    foreach (var b in addedBooks)
-                        g.Books.Add(b);
-
-                });
+                .ForMember(g => g.Books, opt => opt.Ignore());
 
         }
     }

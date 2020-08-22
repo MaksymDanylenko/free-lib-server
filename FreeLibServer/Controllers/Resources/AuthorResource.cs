@@ -3,11 +3,8 @@ using System.Collections.ObjectModel;
 
 namespace FreeLibServer.Controllers.Resources
 {
-    public class AuthorResource : KeyValuePairResource
+    public class AuthorResource : SaveAuthorResource
     {
-
-        public string Info { get; set; }
-
         public ICollection<int> Books { get; set; }
 
         public AuthorResource()
