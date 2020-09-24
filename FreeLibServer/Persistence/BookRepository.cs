@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using FreeLibServer.Controllers.Parameters;
 using FreeLibServer.Core;
 using FreeLibServer.Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,14 +15,26 @@ namespace FreeLibServer.Persistence
         {
             _context = context;
         }
-        public async Task<IEnumerable<Book>> GetBooks() {
+        /*public async Task<IEnumerable<Book>> GetBooks() {
             return await _context.Books
                 .Include(b => b.Authors)
                 .ThenInclude(ba => ba.Author)
                 .Include(b => b.Genres)
                 .ThenInclude(bg => bg.Genre)
                 .ToListAsync();
+        }*/
+
+        public async Task<IEnumerable<Book>> GetBooks(BookParameters bookParameters) {
+            return await _context.Books
+                .Skip((bookParameters.PageNumber - 1) * bookParameters.PageSize)
+                .Take(bookParameters.PageSize)
+                .Include(b => b.Authors)
+                .ThenInclude(ba => ba.Author)
+                .Include(b => b.Genres)
+                .ThenInclude(bg => bg.Genre)
+                .ToListAsync();
         }
+
         public async Task<Book> GetBook(int id, bool includeRelated = true) {
             if (!includeRelated)
                 return await _context.Books.FindAsync(id);
