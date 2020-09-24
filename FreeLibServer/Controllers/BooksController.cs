@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
 using FreeLibServer.Controllers.Parameters;
+using Newtonsoft.Json;
 
 namespace FreeLibServer.Controllers
 {

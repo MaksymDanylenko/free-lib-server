@@ -26,6 +26,7 @@ namespace FreeLibServer.Persistence
 
         public async Task<IEnumerable<Book>> GetBooks(BookParameters bookParameters) {
             return await _context.Books
+                .Where(b => b.Year >= bookParameters.MinYear && b.Year <= bookParameters.MaxYear)
                 .Skip((bookParameters.PageNumber - 1) * bookParameters.PageSize)
                 .Take(bookParameters.PageSize)
                 .Include(b => b.Authors)

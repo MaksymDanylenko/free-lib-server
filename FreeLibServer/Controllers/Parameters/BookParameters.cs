@@ -1,10 +1,11 @@
+using System;
+
 namespace FreeLibServer.Controllers.Parameters
 {
-    public class BookParameters
+    public class BookParameters : QueryStringParameters
     {
-        public int PageSize { get; set; } = 10;
+        public int MinYear { get; set; } = 0;
 
-        public int PageNumber { get; set; } = 1;
-
+        public int MaxYear { get; set; } = (int)DateTime.Now.Year;
     }
 }
