@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FreeLibServer.Core;
 using FreeLibServer.Core.Models;
@@ -32,6 +33,11 @@ namespace FreeLibServer.Persistence
         public void Remove(Genre genre)
         {
             _context.Remove(genre);
+        }
+
+        public async Task<IEnumerable<int>> GetGenreIds()
+        {
+            return await _context.Genres.Select(g => g.Id).ToArrayAsync();
         }
     }
 }

@@ -7,5 +7,10 @@ namespace FreeLibServer.Controllers.Parameters
         public int MinYear { get; set; } = 0;
 
         public int MaxYear { get; set; } = (int)DateTime.Now.Year;
+
+        public int[] Authors { get; set; } = null;
+
+        public int[] Genres { get; set; } = null;
+        
     }
 }

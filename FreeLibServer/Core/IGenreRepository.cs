@@ -6,6 +6,7 @@ namespace FreeLibServer.Core
 {
     public interface IGenreRepository
     {
+        Task<IEnumerable<int>> GetGenreIds();
         Task<IEnumerable<Genre>> GetGenres();
         Task<Genre> GetGenre(int id);
         Task Add(Genre genre);

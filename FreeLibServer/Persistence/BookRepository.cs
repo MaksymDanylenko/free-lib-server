@@ -25,15 +25,27 @@ namespace FreeLibServer.Persistence
         }*/
 
         public async Task<IEnumerable<Book>> GetBooks(BookParameters bookParameters) {
-            return await _context.Books
-                .Where(b => b.Year >= bookParameters.MinYear && b.Year <= bookParameters.MaxYear)
-                .Skip((bookParameters.PageNumber - 1) * bookParameters.PageSize)
-                .Take(bookParameters.PageSize)
+            var books = await _context.Books
+                .Where(b =>
+                    b.Year >= bookParameters.MinYear
+                    && b.Year <= bookParameters.MaxYear)
                 .Include(b => b.Authors)
                 .ThenInclude(ba => ba.Author)
+                //.Where(b => 
+                //    Enumerable.Intersect(bookParameters.Authors, b.Authors.Select(a => a.AuthorId)).Count() > 0)
                 .Include(b => b.Genres)
                 .ThenInclude(bg => bg.Genre)
+                //.Where(b => 
+                //    Enumerable.Intersect(bookParameters.Genres, b.Genres.Select(g => g.GenreId)).Count() > 0)
                 .ToListAsync();
+            
+            return books
+                .Where(b => 
+                    Enumerable.Intersect(bookParameters.Authors, b.Authors.Select(a => a.AuthorId)).Count() > 0)
+                .Where(b => 
+                    Enumerable.Intersect(bookParameters.Genres, b.Genres.Select(g => g.GenreId)).Count() > 0)
+                .Skip((bookParameters.PageNumber - 1) * bookParameters.PageSize)
+                .Take(bookParameters.PageSize);
         }
 
         public async Task<Book> GetBook(int id, bool includeRelated = true) {
