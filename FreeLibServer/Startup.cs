@@ -33,7 +33,7 @@ namespace FreeLibServer
             services.AddControllers();
 
             services.AddDbContext<FreeLibDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Default")));
+                options.UseSqlite(Configuration.GetConnectionString("DefaultSQLite")));
 
             services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 
@@ -41,6 +41,7 @@ namespace FreeLibServer
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +55,11 @@ namespace FreeLibServer
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(policy => policy
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("http://localhost:4200"));
 
             app.UseAuthorization();
 

@@ -2,7 +2,7 @@
 
 namespace FreeLibServer.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialSQLite : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,7 @@ namespace FreeLibServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Info = table.Column<string>(nullable: true)
                 },
@@ -25,7 +25,7 @@ namespace FreeLibServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
                     Info = table.Column<string>(nullable: true),
@@ -43,7 +43,7 @@ namespace FreeLibServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>

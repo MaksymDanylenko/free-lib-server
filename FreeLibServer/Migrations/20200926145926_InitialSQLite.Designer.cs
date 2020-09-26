@@ -2,37 +2,33 @@
 using FreeLibServer.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FreeLibServer.Migrations
 {
     [DbContext(typeof(FreeLibDbContext))]
-    [Migration("20200819224432_Initial")]
-    partial class Initial
+    [Migration("20200926145926_InitialSQLite")]
+    partial class InitialSQLite
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "3.1.8");
 
-            modelBuilder.Entity("FreeLibServer.Models.Author", b =>
+            modelBuilder.Entity("FreeLibServer.Core.Models.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Info")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
@@ -40,45 +36,44 @@ namespace FreeLibServer.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("FreeLibServer.Models.Book", b =>
+            modelBuilder.Entity("FreeLibServer.Core.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Contents")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Info")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<int>("NumberOfPages")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Year")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("FreeLibServer.Models.BookAuthor", b =>
+            modelBuilder.Entity("FreeLibServer.Core.Models.BookAuthor", b =>
                 {
                     b.Property<int>("BookId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("AuthorId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("BookId", "AuthorId");
 
@@ -87,13 +82,13 @@ namespace FreeLibServer.Migrations
                     b.ToTable("BookAuthors");
                 });
 
-            modelBuilder.Entity("FreeLibServer.Models.BookGenre", b =>
+            modelBuilder.Entity("FreeLibServer.Core.Models.BookGenre", b =>
                 {
                     b.Property<int>("BookId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("GenreId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("BookId", "GenreId");
 
@@ -102,16 +97,15 @@ namespace FreeLibServer.Migrations
                     b.ToTable("BookGenres");
                 });
 
-            modelBuilder.Entity("FreeLibServer.Models.Genre", b =>
+            modelBuilder.Entity("FreeLibServer.Core.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
@@ -119,30 +113,30 @@ namespace FreeLibServer.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("FreeLibServer.Models.BookAuthor", b =>
+            modelBuilder.Entity("FreeLibServer.Core.Models.BookAuthor", b =>
                 {
-                    b.HasOne("FreeLibServer.Models.Author", "Author")
+                    b.HasOne("FreeLibServer.Core.Models.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FreeLibServer.Models.Book", "Book")
+                    b.HasOne("FreeLibServer.Core.Models.Book", "Book")
                         .WithMany("Authors")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FreeLibServer.Models.BookGenre", b =>
+            modelBuilder.Entity("FreeLibServer.Core.Models.BookGenre", b =>
                 {
-                    b.HasOne("FreeLibServer.Models.Book", "Book")
+                    b.HasOne("FreeLibServer.Core.Models.Book", "Book")
                         .WithMany("Genres")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FreeLibServer.Models.Genre", "Genre")
+                    b.HasOne("FreeLibServer.Core.Models.Genre", "Genre")
                         .WithMany("Books")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
